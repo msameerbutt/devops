@@ -1,0 +1,22 @@
+version: '3.7'
+
+networks:
+  dev-stack:
+    driver: bridge
+    name: dev-stack
+
+services:
+
+  terraform:
+    image: ${DOCKER_REGISTORY}/${DOCKER_REPOSITORY}/terraform:latest
+    container_name: ${DOCKER_REGISTORY}-terraform
+    build:
+      context: ${PWD}/docker
+    tty: true
+    volumes:
+      - ${PWD}/src:/app
+    command: ["bash"]
+    env_file:
+      - .env
+    networks:
+      - dev-stack
