@@ -7,6 +7,10 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+.git
+.cache
+.terraform
+*.plan
 
 # Icon must end with two \r
 Icon
