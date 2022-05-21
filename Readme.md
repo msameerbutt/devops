@@ -1,5 +1,9 @@
 # Terraform
-A php laravel project infrastructure based on AWS as provider
+A Terraform infrastructure based on AWS as provider, There few modules for varioius common scenaros
+
+## Dependencies
+- Terraform
+- [TFSEC](https://aquasecurity.github.io/tfsec/v1.16.3/)
 
 
 Add following into your .env files or set the following environment variables
@@ -43,3 +47,8 @@ terraform plan \
 
 terraform apply tf.plan
 ```
+
+
+## Resources
+- [Running Terratest in a Docker Container](https://austincloud.guru/2021/06/24/running-terratest-in-a-docker-container/)
+- [TFSEC](https://aquasecurity.github.io/tfsec/v1.16.3/)
