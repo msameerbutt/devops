@@ -21,7 +21,7 @@ export TF_VAR_tf_state_bucket_name="sam-devops-scripts-files"
 export TF_VAR_tf_state_bucket_key="${ENV_NAME}/${ENV_NAME}"
 export STACK_NAME=iam
 
-cd /app/stacks/${STACK_NAME}/infra
+cd /app/terraform/stacks/${STACK_NAME}/infra
 
 terraform init \
 -backend-config="key=${TF_VAR_tf_state_bucket_key}/${STACK_NAME}-infra.tfstate" \
@@ -52,3 +52,4 @@ terraform apply tf.plan
 ## Resources
 - [Running Terratest in a Docker Container](https://austincloud.guru/2021/06/24/running-terratest-in-a-docker-container/)
 - [TFSEC](https://aquasecurity.github.io/tfsec/v1.16.3/)
+- [docker-terratest](https://github.com/AustinCloudGuru/docker-terratest)

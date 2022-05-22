@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  EnvironmentName:
+    Description: Select the environment
+    Type: String
+    Default: dev
+    AllowedValues: 
+      - dev
+      - prod
+
+Mappings:
+  InstanceTypes:
+    dev:
+      instanceType: t2.micro
+    prod:
+      instanceType: t2.micro 
+  InstanceAmis:
+    dev:
+      AMI: ami-0c6120f461d6b39e9
+    prod:
+      AMI: ami-0d06793241742e720     
+
+Resources:
+  WebEC2KeyPair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: MyKeyPair
+
+  WebEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap
+        - InstanceAmis
+        - !Ref EnvironmentName
+        - AMI
+      InstanceType: !FindInMap
+        - InstanceTypes
+        - !Ref EnvironmentName
+        - instanceType
+      KeyName: !Ref WebEC2KeyPair
