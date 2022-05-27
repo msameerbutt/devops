@@ -2,9 +2,9 @@
 
 terraform {
   backend "s3" {
-    region     = "Set on command line with 'init -backend-config...'"
-    bucket     = "Set on command line with 'init -backend-config...'"
-    key        = "Set on command line with 'init -backend-config...'"
+    region = "Set on command line with 'init -backend-config...'"
+    bucket = "Set on command line with 'init -backend-config...'"
+    key    = "Set on command line with 'init -backend-config...'"
   }
 }
 
@@ -24,9 +24,9 @@ locals {
 
   # Default tags
   default_tags = {
-    Profile = var.env_profile
+    Profile     = var.env_profile
     Environment = var.env_name
-    Owner = var.env_owner
-    Stack = var.stack_name
+    Owner       = var.env_owner
+    Stack       = var.stack_name
   }
- }
+}

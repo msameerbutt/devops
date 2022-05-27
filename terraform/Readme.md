@@ -5,6 +5,13 @@ A Terraform infrastructure based on AWS as provider, There few modules for vario
 - Terraform
 - [TFSEC](https://aquasecurity.github.io/tfsec/v1.16.3/)
 
+## Available Stack and their order
+### 1. STACK = shared
+Shared stack include the followings:
+
+- IAM Roles and Policies
+- Billing Alarms
+
 
 Add following into your .env files or set the following environment variables
 
@@ -19,7 +26,7 @@ export TF_VAR_env_name=${ENV_NAME}
 export TF_VAR_region=${ENV_REGION}
 export TF_VAR_tf_state_bucket_name="sam-devops-scripts-files"
 export TF_VAR_tf_state_bucket_key="${ENV_NAME}/${ENV_NAME}"
-export STACK_NAME=iam
+export STACK_NAME=shared
 
 cd /app/terraform/stacks/${STACK_NAME}/infra
 

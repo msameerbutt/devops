@@ -1,0 +1,9 @@
+Tags:
+  - Key: environment_name
+    Value: !Ref EnvironmentName
+  - Key: environment_profile
+    Value: !Ref EnvironmentProfile
+  - Key: owner
+    Value: !Ref EnvironmentOwner
+  - Key: stack
+    Value: !Ref StackName
