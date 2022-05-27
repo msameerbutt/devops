@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This stack is to build foundation stack
+
+
+Parameters:
+  EnvironmentName:
+    Description: Select the environment
+    Type: String
+    Default: dev
+    AllowedValues: 
+      - dev
+      - prod
+
+Mappings:
+  RepositoryNames:
+    dev:
+      RepositoryName: devAppRepo
+    prod:
+      RepositoryName: prodAppRepo
+
+Resources:
+  AppRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryName: !FindInMap
+        - RepositoryNames
+        - !Ref EnvironmentName
+        - RepositoryName
+      RepositoryDescription: !Sub 'This is a ${EnvironmentName}-repository for my project with code'
+
+Outputs:
+  AppRepo:
+    Description: Staging Application Access URL
+    Value: !Ref AppRepo

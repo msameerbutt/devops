@@ -1,0 +1,108 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: EC2 Instance with Instance profile role to access S3 buckets
+
+
+Resources:
+  WebEC2KeyPair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: MyKeyPair
+
+  MyCICDEC2InstanceProfileRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: MyCICDEC2InstanceProfilePolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:Get*'
+                  - 's3:List*'
+                Resource: '*'
+
+  MyInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref MyCICDEC2InstanceProfileRole
+
+
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: My SG with port 22, 8080 and 80 inbound
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '80'          
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+ 
+  MyStageVMInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c6120f461d6b39e9
+      InstanceType: t2.micro
+      KeyName: !Ref WebEC2KeyPair
+      SecurityGroups:
+        - !Ref MySecurityGroup
+      IamInstanceProfile: !Ref MyInstanceProfile
+      Tags:
+        - Key: Name        
+          Value: dev
+      UserData: 
+        Fn::Base64: |  
+          #!/bin/bash
+          sudo yum update -y
+          sudo amazon-linux-extras install nginx1 -y 
+          sudo systemctl enable nginx
+          sudo systemctl start nginx
+          touch /usr/share/nginx/html/index2.html
+          echo "Cloud Formation Nginx-Dev" > /usr/share/nginx/html/index2.html   
+
+
+  MyProdVMInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c6120f461d6b39e9
+      InstanceType: t2.micro
+      KeyName: !Ref WebEC2KeyPair
+      SecurityGroups:
+        - !Ref MySecurityGroup
+      IamInstanceProfile: !Ref MyInstanceProfile
+      Tags:
+        - Key: Name        
+          Value: prod
+      UserData: 
+        Fn::Base64: |  
+          #!/bin/bash
+          sudo yum update -y
+          sudo amazon-linux-extras install nginx1 -y 
+          sudo systemctl enable nginx
+          sudo systemctl start nginx
+          touch /usr/share/nginx/html/index2.html
+          echo "Cloud Formation Nginx-Prod" > /usr/share/nginx/html/index2.html      
+
+      
+Outputs:
+  StageAppURL:
+    Description: Staging Application Access URL
+    Value: !Sub 'http://${MyStageVMInstance.PublicDnsName}/index2.html'          
+  ProdAppURL:
+    Description: Prod Application Access URL
+    Value: !Sub 'http://${MyProdVMInstance.PublicDnsName}/index2.html'              
