@@ -1,7 +1,7 @@
 # AWS CloudFormation
 This will provide to deploy/modify/remove AWS resources using AWS CloudFormation templates
 
-### Creat Stack 
+### Creat Stack
 Execute the following command to create a stack.
 ```
 export STACK_NAME="shared"
@@ -41,7 +41,7 @@ aws cloudformation create-stack \
 ParameterKey=EnvironmentName,ParameterValue=${ENV_PROFILE},
 ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE},
 ```
-### Create a ChangeSet Stack 
+### Create a ChangeSet Stack
 Execute the following command to create & execute a stack ChangeSet.
 ```
 export STACK_NAME="ec2"

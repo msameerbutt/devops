@@ -7,7 +7,7 @@ Parameters:
     Description: Select the environment
     Type: String
     Default: dev
-    AllowedValues: 
+    AllowedValues:
       - dev
       - prod
 

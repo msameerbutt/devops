@@ -60,3 +60,4 @@ terraform apply tf.plan
 - [Running Terratest in a Docker Container](https://austincloud.guru/2021/06/24/running-terratest-in-a-docker-container/)
 - [TFSEC](https://aquasecurity.github.io/tfsec/v1.16.3/)
 - [docker-terratest](https://github.com/AustinCloudGuru/docker-terratest)
+- [Using CloudFoundation to Build, Manage, and Deploy CloudFormation Templates](https://start.jcolemorrison.com/cloudfoundation-build-manage-and-deploy-cloudformation-templates/)

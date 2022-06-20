@@ -8,20 +8,33 @@ FROM python:3.9-alpine3.15
 ENV TERRAFORM_VERSION=0.15.3
 
 RUN apk update && \
-    apk upgrade && \
-    apk add --no-cache --update git curl bash unzip jq wget py3-virtualenv ruby
+ apk upgrade && \
+ apk add --no-cache --update git curl bash unzip jq wget gcc py3-virtualenv ruby
 
+# Installing AWS-CLI, Boto3, Python Libraries, Terraform, CFN-Nag
 RUN pip3 install --upgrade pip \
-    && pip3 install --no-cache-dir requests pytest pytest-env boto3 pyyaml pipreqs pytz awscli PyMySQL \
-    && cd /tmp \
-    && wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
-    && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin \
-    && gem install cfn-nag \
-    && rm -rf /var/cache/apk/*
+ && pip3 install --no-cache-dir requests pytest pytest-env boto3 pyyaml pipreqs pytz awscli PyMySQL pre-commit \
+ && cd /tmp \
+ && wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+ && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin \
+ && gem install cfn-nag \
+ && rm -rf /var/cache/apk/*
+
+# Installing AWS SAM CLI
+RUN apk -v --no-cache --update add \
+     musl-dev \
+     gcc \
+     python3 \
+     python3-dev
+RUN python3 -m ensurepip --upgrade \
+     && pip3 install --upgrade pip
+RUN pip3 install --upgrade awscli aws-sam-cli
+RUN apk del python3-dev gcc musl-dev
+
 
 # Installing tfsec for Terraform security
 COPY --from=fsec /usr/bin/tfsec /bin/tfsec
-# Installing Golang for Terratets 
+# Installing Golang for Terratets
 COPY --from=golang /usr/local/go/ /usr/local/go/
 # Setting Goroot path
 ENV GOROOT /usr/local/go

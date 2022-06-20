@@ -1,6 +1,0 @@
-Mappings:
-  ImageIds:
-    dev:
-      ImageId: ami-0c6120f461d6b39e9
-    prod:
-      ImageId: ami-0c6120f461d6b39e9
