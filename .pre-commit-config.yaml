@@ -26,3 +26,11 @@ repos:
       - id: no-commit-to-branch
         args: [--branch=master, --branch=main]
       - id: trailing-whitespace
+
+# Its throwing error yet, we will be fixing soon
+#  - repo: https://github.com/antonbabenko/pre-commit-terraform
+#    rev: v1.72.2 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+#    hooks:
+#      - id: terraform_fmt
+#      - id: terraform_docs
+#      - id: terraform_tfsec
