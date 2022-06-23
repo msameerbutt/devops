@@ -32,6 +32,7 @@ docker_up() {
   -v /var/run/docker.sock:/var/run/docker.sock \
   --network="bridge" \
   --workdir="${container_dir}" \
+  -u $(id -u ${USER}):$(id -g ${USER}) \
   ${docker_cmd}
 }
 
