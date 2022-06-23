@@ -10,6 +10,7 @@ repos:
     rev: v0.58.3
     hooks:
       - id: cfn-python-lint
+        args: [--update-specs]
         files: cloudformation/.*\.(json|yml|yaml)$
       - id: cfn-python-lint
         files: app-sam/.*\.(json|yml|yaml)$

@@ -1,6 +1,10 @@
 # AWS CloudFormation
 This will provide to deploy/modify/remove AWS resources using AWS CloudFormation templates
 
+### Build Your Environment
+Go to main readme.md file and follow the steps in [Build Your Environment](../readme.md) and Execute `docker_up` command.
+Following steps command must be executed within the container.
+
 ### Creat Stack
 Execute the following command to create a stack.
 ```
