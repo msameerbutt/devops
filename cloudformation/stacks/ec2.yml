@@ -4,7 +4,7 @@ Description: EC2 Instance with Instance profile role to access S3 buckets
 
 Resources:
   WebEC2KeyPair:
-    Type: 'AWS::EC2::KeyPair'
+    Type: AWS::EC2::KeyPair
     Properties:
       KeyName: MyKeyPair
 
@@ -49,10 +49,15 @@ Resources:
           ToPort: '22'
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
-          FromPort: '80'          
+          FromPort: '80'
           ToPort: '80'
           CidrIp: 0.0.0.0/0
- 
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
   MyStageVMInstance:
     Type: AWS::EC2::Instance
     Properties:
@@ -63,18 +68,17 @@ Resources:
         - !Ref MySecurityGroup
       IamInstanceProfile: !Ref MyInstanceProfile
       Tags:
-        - Key: Name        
+        - Key: Name
           Value: dev
-      UserData: 
-        Fn::Base64: |  
+      UserData:
+        Fn::Base64: |
           #!/bin/bash
           sudo yum update -y
-          sudo amazon-linux-extras install nginx1 -y 
+          sudo amazon-linux-extras install nginx1 -y
           sudo systemctl enable nginx
           sudo systemctl start nginx
           touch /usr/share/nginx/html/index2.html
-          echo "Cloud Formation Nginx-Dev" > /usr/share/nginx/html/index2.html   
-
+          echo "Cloud Formation Nginx-Dev" > /usr/share/nginx/html/index2.html
 
   MyProdVMInstance:
     Type: AWS::EC2::Instance
@@ -86,23 +90,23 @@ Resources:
         - !Ref MySecurityGroup
       IamInstanceProfile: !Ref MyInstanceProfile
       Tags:
-        - Key: Name        
+        - Key: Name
           Value: prod
-      UserData: 
-        Fn::Base64: |  
+      UserData:
+        Fn::Base64: |
           #!/bin/bash
           sudo yum update -y
-          sudo amazon-linux-extras install nginx1 -y 
+          sudo amazon-linux-extras install nginx1 -y
           sudo systemctl enable nginx
           sudo systemctl start nginx
           touch /usr/share/nginx/html/index2.html
-          echo "Cloud Formation Nginx-Prod" > /usr/share/nginx/html/index2.html      
+          echo "Cloud Formation Nginx-Prod" > /usr/share/nginx/html/index2.html
 
-      
+
 Outputs:
   StageAppURL:
     Description: Staging Application Access URL
-    Value: !Sub 'http://${MyStageVMInstance.PublicDnsName}/index2.html'          
+    Value: !Sub 'http://${MyStageVMInstance.PublicDnsName}/index2.html'
   ProdAppURL:
     Description: Prod Application Access URL
-    Value: !Sub 'http://${MyProdVMInstance.PublicDnsName}/index2.html'              
+    Value: !Sub 'http://${MyProdVMInstance.PublicDnsName}/index2.html'

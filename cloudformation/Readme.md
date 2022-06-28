@@ -1,64 +1,72 @@
-# Cloudformation Guide
-Find below some commnads to execute cloudformation template
+# AWS CloudFormation
+This will provide to deploy/modify/remove AWS resources using AWS CloudFormation templates
 
-### Create Stack
+### Build Your Environment
+Go to main readme.md file and follow the steps in [Build Your Environment](../readme.md) and Execute `docker_up` command.
+Following steps command must be executed within the container.
+
+### Creat Stack
+Execute the following command to create a stack.
 ```
-aws cloudformation create-stack \
---stack-name "demoApp" \
---template-body "file://network.yml" \
---parameters \
-ParameterKey=EnvironmentName,ParameterValue=dev
-
-aws cloudformation create-stack \
---stack-name "Foundation" \
---template-body "file://foundation.yml" \
---parameters \
-ParameterKey=EnvironmentName,ParameterValue=dev
+export STACK_NAME="shared"
+export TEMPLATE_BODY="file:///app/cloudformation/stacks/${STACK_NAME}/template.yml"
 
 aws cloudformation create-stack \
---stack-name "demoApp" \
---template-body "file://ec2.yml" \
---capabilities CAPABILITY_NAMED_IAM
-
-### Create changeset
-```
-aws cloudformation  create-change-set \
---change-set-name "AMIUpdatedProd" \
---stack-name "demoApp" \
---template-body "file://ec2.yml" \
+--stack-name ${STACK_NAME} \
+--template-body ${TEMPLATE_BODY} \
 --parameters \
-ParameterKey=EnvironmentName,ParameterValue=prod
+ParameterKey=EnvironmentName,ParameterValue=${ENV_NAME} \
+ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE} \
+ParameterKey=EnvironmentOwner,ParameterValue=${ENV_OWNER} \
+ParameterKey=StackName,ParameterValue=${StackName} \
+--capabilities CAPABILITY_AUTO_EXPAND
 
-aws cloudformation  create-change-set \
---change-set-name "OutputAdded" \
---stack-name "Foundation" \
---template-body "file://foundation.yml" \
+export STACK_NAME="network"
+export TEMPLATE_BODY="file://app/cloudformation/stacks/${STACK_NAME}.yml"
+
+aws cloudformation create-stack \
+--stack-name ${STACK_NAME} \
+--template-body ${TEMPLATE_BODY} \
 --parameters \
-ParameterKey=EnvironmentName,ParameterValue=dev
+ParameterKey=EnvironmentName,ParameterValue=${ENV_PROFILE},
+ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE},
+```
+### Creat Stack with capabilities
+Execute the following command to create a stack.
+```
+export STACK_NAME="ec2"
+export TEMPLATE_BODY="file://app/cloudformation/stacks/${STACK_NAME}.yml"
+
+aws cloudformation create-stack \
+--stack-name ${STACK_NAME} \
+--template-body ${TEMPLATE_BODY} \
+--capabilities CAPABILITY_NAMED_IAM \
+--parameters \
+ParameterKey=EnvironmentName,ParameterValue=${ENV_PROFILE},
+ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE},
+```
+### Create a ChangeSet Stack
+Execute the following command to create & execute a stack ChangeSet.
+```
+export STACK_NAME="ec2"
+export TEMPLATE_BODY="file://app/cloudformation/stacks/${STACK_NAME}.yml"
 
 aws cloudformation  create-change-set \
---change-set-name "NginxAdded" \
---stack-name "demoApp" \
---template-body "file://ec2.yml" \
---capabilities CAPABILITY_NAMED_IAM
-```
-
-### Execute changeset
-```
-aws cloudformation execute-change-set \
---change-set-name "AMIUpdatedProd" \
---stack-name "demoApp"
+--stack-name ${STACK_NAME} \
+--change-set-name "${STACK_NAME}-change-set-1" \
+--template-body ${TEMPLATE_BODY} \
+--capabilities CAPABILITY_NAMED_IAM \
+--parameters \
+ParameterKey=EnvironmentName,ParameterValue=${ENV_PROFILE},
+ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE}
 
 aws cloudformation execute-change-set \
---change-set-name "OutputAdded" \
---stack-name "Foundation"
-
-aws cloudformation execute-change-set \
---change-set-name "NginxAdded" \
---stack-name "demoApp"
+--stack-name ${STACK_NAME} \
+--change-set-name "${STACK_NAME}-change-set-1"
 ```
 
 ### Destroy Stack
 ```
-aws cloudformation delete-stack --stack-name "demoApp"
+export STACK_NAME="ec2"
+aws cloudformation delete-stack --stack-name "${STACK_NAME}"
 ```

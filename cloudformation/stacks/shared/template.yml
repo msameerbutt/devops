@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: EC2 Instance Testing
+
+Parameters:
+  EnvironmentName:
+    Description: Provide the environment name
+    Type: String
+    Default: base
+  EnvironmentProfile:
+    Description: Select the environment profile
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - stage
+      - prod
+  EnvironmentOwner:
+    Description: provide the environment owner
+    Type: String
+    Default: sam
+  StackName:
+    Description: provide the stack name
+    Type: String
+    Default: sam
+
+Transform:
+  Name: 'AWS::Include'
+  Parameters:
+    Location: 'file:///app/cloudformation/common/mappings.yml'
+
+Resources:
+  EC2KeyPair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: EC2KeyPair
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId:
+        Fn::FindInMap:
+          - "RegionMap"
+          - Ref: "AWS::Region"
+          - "AMI"
+      KeyName:
+        Ref: "KeyName"
+      Fn::Transform:
+        Name: 'AWS::Include'
+        Parameters:
+          Location: 'file:///app/cloudformation/common/tags.yml'
