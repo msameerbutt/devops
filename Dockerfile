@@ -53,7 +53,7 @@ RUN helm plugin install https://github.com/chartmuseum/helm-push
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools
 RUN pip install docker-compose-templer
-RUN pip3 install --upgrade awscli aws-sam-cli
+RUN pip3 install --upgrade awscli aws-sam-cli cfn-lint
 RUN gem install cfn-nag   
 
 # Setting PathS

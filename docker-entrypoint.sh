@@ -10,6 +10,8 @@ helm version
 tfsec --version
 yq --version
 docker-compose-templer --version
+cfn_nag --version
+cfn-lint --version
 
 # To proceed with command execution
 exec $@
