@@ -1,15 +1,15 @@
 version: '3.7'
 
 networks:
-  dev-stack:
+  stack:
     driver: bridge
-    name: dev-stack
+    name: devops-stack
 
 services:
 
-  terraform:
-    image: ${DOCKER_REGISTORY}/${DOCKER_REPOSITORY}/terraform:latest
-    container_name: ${DOCKER_REGISTORY}-terraform
+  devops:
+    image: ${DOCKER_IMAGE}:${DOCKER_TAG}
+    container_name: devops
     build:
       context: ./
       dockerfile: Dockerfile
@@ -18,8 +18,9 @@ services:
       - ${PWD}:/app
       - ${HOME}/.ssh/id_rsa.pub:/root/id_rsa.pub
       - ${HOME}/.ssh/id_rsa:/root/id_rsa
+    entrypoint: /usr/local/bin/docker-entrypoint
     command: ["bash"]
     env_file:
       - .env
     networks:
-      - dev-stack
+      - stack
