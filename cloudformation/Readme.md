@@ -15,9 +15,9 @@ aws cloudformation create-stack \
 --stack-name ${STACK_NAME} \
 --template-body ${TEMPLATE_BODY} \
 --parameters \
-ParameterKey=EnvironmentName,ParameterValue=${ENV_NAME} \
-ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE} \
-ParameterKey=EnvironmentOwner,ParameterValue=${ENV_OWNER} \
+ParameterKey=EnvironmentName,ParameterValue=${SERVICE} \
+ParameterKey=EnvironmentProfile,ParameterValue=${ENVIRONMENT} \
+ParameterKey=EnvironmentOwner,ParameterValue=${TECHNICAL_OWNER} \
 ParameterKey=StackName,ParameterValue=${StackName} \
 --capabilities CAPABILITY_AUTO_EXPAND
 
@@ -28,8 +28,8 @@ aws cloudformation create-stack \
 --stack-name ${STACK_NAME} \
 --template-body ${TEMPLATE_BODY} \
 --parameters \
-ParameterKey=EnvironmentName,ParameterValue=${ENV_PROFILE},
-ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE},
+ParameterKey=EnvironmentName,ParameterValue=${ENVIRONMENT},
+ParameterKey=EnvironmentProfile,ParameterValue=${ENVIRONMENT},
 ```
 ### Creat Stack with capabilities
 Execute the following command to create a stack.
@@ -42,8 +42,8 @@ aws cloudformation create-stack \
 --template-body ${TEMPLATE_BODY} \
 --capabilities CAPABILITY_NAMED_IAM \
 --parameters \
-ParameterKey=EnvironmentName,ParameterValue=${ENV_PROFILE},
-ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE},
+ParameterKey=EnvironmentName,ParameterValue=${ENVIRONMENT},
+ParameterKey=EnvironmentProfile,ParameterValue=${ENVIRONMENT},
 ```
 ### Create a ChangeSet Stack
 Execute the following command to create & execute a stack ChangeSet.
@@ -57,8 +57,8 @@ aws cloudformation  create-change-set \
 --template-body ${TEMPLATE_BODY} \
 --capabilities CAPABILITY_NAMED_IAM \
 --parameters \
-ParameterKey=EnvironmentName,ParameterValue=${ENV_PROFILE},
-ParameterKey=EnvironmentProfile,ParameterValue=${ENV_PROFILE}
+ParameterKey=EnvironmentName,ParameterValue=${ENVIRONMENT},
+ParameterKey=EnvironmentProfile,ParameterValue=${ENVIRONMENT}
 
 aws cloudformation execute-change-set \
 --stack-name ${STACK_NAME} \

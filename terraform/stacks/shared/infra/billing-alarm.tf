@@ -1,6 +1,6 @@
 locals {
   alarm = {
-    name                = "account-billing-alarm-${lower(var.currency)}-${var.env_profile}"
+    name                = "account-billing-alarm-${lower(var.currency)}-${var.environment}"
     description         = var.aws_account_id == null ? "Billing consolidated alarm >= ${var.currency} ${var.monthly_billing_threshold}" : "Billing alarm account ${var.aws_account_id} >= ${var.currency} ${var.monthly_billing_threshold}"
     comparison_operator = "GreaterThanOrEqualToThreshold"
     evaluation_periods  = "1"
@@ -19,7 +19,7 @@ locals {
 }
 resource "aws_sns_topic" "billing_alarm" {
   count             = var.create_sns_topic ? 1 : 0
-  name              = "billing_alarm-${lower(var.currency)}-${var.env_profile}"
+  name              = "billing_alarm-${lower(var.currency)}-${var.environment}"
   kms_master_key_id = data.aws_kms_key.keys.arn
   tags              = merge({ Name = format("%s-billing_alarm", local.prefix_name_tag) }, local.default_tags)
 }

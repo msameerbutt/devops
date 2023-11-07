@@ -5,9 +5,6 @@ terraform {
     region = "Set on command line with 'init -backend-config...'"
     bucket = "Set on command line with 'init -backend-config...'"
     key    = "Set on command line with 'init -backend-config...'"
-    encrypt = true
-    # enable the following if we want to use lock  tf state files
-    # dynamodb_table = "value"
   }
 }
 
