@@ -26,9 +26,9 @@ resource "aws_iam_role" "webserver" {
 }
 resource "aws_iam_instance_profile" "webserver" {
   name = format("%s-webserver-role", local.prefix_name_tag)
-  role = aws_iam_role.ec2_web.name
+  role = aws_iam_role.webserver.name
   depends_on = [
-    aws_iam_role.ec2-web
+    aws_iam_role.webserver
   ]
   tags = merge({
      Name = format("%s-webserver-iprofile", local.prefix_name_tag)
