@@ -17,7 +17,7 @@ Add following into your .env files or set the following environment variables
 
 ```
 export ENVIRONMENT=dev
-export TECHNICAL_OWNER=sam
+export TECHNICAL_OWNER=msameerbutt@gmail.com
 export SERVICE=base
 export AWS_DEFAULT_REGION=ap-southeast-2
 export TF_VAR_environment=${ENVIRONMENT}
