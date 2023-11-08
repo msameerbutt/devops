@@ -1,6 +1,6 @@
 locals {
   alarm = {
-    name                = "account-billing-alarm-${lower(var.currency)}-${var.environment}"
+    name                = format("%s-%s-billing-alarm",local.prefix_name_tag,lower(var.currency))
     description         = var.aws_account_id == null ? "Billing consolidated alarm >= ${var.currency} ${var.monthly_billing_threshold}" : "Billing alarm account ${var.aws_account_id} >= ${var.currency} ${var.monthly_billing_threshold}"
     comparison_operator = "GreaterThanOrEqualToThreshold"
     evaluation_periods  = "1"
@@ -9,7 +9,7 @@ locals {
     period              = "28800"
     statistic           = "Maximum"
     threshold           = var.monthly_billing_threshold
-    alarm_actions       = var.create_sns_topic ? concat([aws_sns_topic.billing_alarm[0].arn], var.sns_topic_arns) : var.sns_topic_arns
+    alarm_actions       = var.create_sns_topic ? concat([aws_sns_topic.billing-alarm[0].arn], var.sns_topic_arns) : var.sns_topic_arns
 
     dimensions = {
       currency       = var.currency
@@ -17,19 +17,27 @@ locals {
     }
   }
 }
-resource "aws_sns_topic" "billing_alarm" {
+
+resource "aws_sns_topic" "billing-alarm" {  
   count             = var.create_sns_topic ? 1 : 0
-  name              = "billing_alarm-${lower(var.currency)}-${var.environment}"
-  kms_master_key_id = data.aws_kms_key.keys.arn
-  tags              = merge({ Name = format("%s-billing_alarm", local.prefix_name_tag) }, local.default_tags)
+  name              = format("%s-%s-billing-alarm", local.prefix_name_tag,lower(var.currency))
+  kms_master_key_id = "arn:aws:kms:${var.region}:${local.aws_account_id}:key/aws/sns"
+  tags              = merge({
+     Name = format("%s-%s-billing-alarm", local.prefix_name_tag,lower(var.currency))
+     resource_type = "aws_sns_topic"
+     resource_name =  "billing-alarm"
+    }, local.default_tags
+  )  
 }
-resource "aws_sns_topic_subscription" "billing_alarm" {
+
+resource "aws_sns_topic_subscription" "billing-alarm" {
   count     = var.create_sns_topic ? 1 : 0
-  topic_arn = aws_sns_topic.billing_alarm[0].arn
+  topic_arn = aws_sns_topic.billing-alarm[0].arn
   protocol  = "email"
-  endpoint  = var.create_sns_email
+  endpoint  = var.technical_owner
 }
-resource "aws_cloudwatch_metric_alarm" "billing_alarm" {
+
+resource "aws_cloudwatch_metric_alarm" "billing-alarm" {
   alarm_name          = lookup(local.alarm, "name")
   alarm_description   = lookup(local.alarm, "description")
   comparison_operator = lookup(local.alarm, "comparison_operator")
@@ -46,5 +54,10 @@ resource "aws_cloudwatch_metric_alarm" "billing_alarm" {
     LinkedAccount = lookup(lookup(local.alarm, "dimensions"), "linked_account", null)
   }
 
-  tags = merge({ Name = format("%s-billing_alarm", local.prefix_name_tag) }, local.default_tags)
+  tags              = merge({
+     Name = lookup(local.alarm, "name")
+     resource_type = "aws_cloudwatch_metric_alarm"
+     resource_name =  "billing-alarm"
+    }, local.default_tags
+  )   
 }

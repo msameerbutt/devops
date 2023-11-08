@@ -5,11 +5,16 @@ Swiss Army knife Docker Environment for DevOps task.
 - Terraform
 - Terraform Security (TFSec)
 - AWS-CLI
-- AWS SAM
-- CFN-NAG
 - Git
 - Pre-Commit
 - Go
+- Helm
+- Kubectl
+- YQ
+- Docker Compose Templer
+
+- AWS SAM
+- CFN-NAG
 
 ### Build Your Environment
 Execute the following command from the root directory of this repo
