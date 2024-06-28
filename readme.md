@@ -12,7 +12,6 @@ Swiss Army knife Docker Environment for DevOps task.
 - Kubectl
 - YQ
 - Docker Compose Templer
-
 - AWS SAM
 - CFN-NAG
 
@@ -29,3 +28,19 @@ Note: to run pre-commit from with in docker follow the additional first two step
 - `export XDG_CACHE_HOME=/tmp` to change the cache directory from /.cache to tmp
 - `pre-commit install` to install pre-commit dependencies defined in .pre-commit.yaml file.
 - `pre-commit run --all-files` to run all pre-commit hooks at once.
+
+### Pre-Commit integration with git (Advance)
+Add following pre-commit script to `.git/hooks/pre-commit` to your repository
+```
+cd $(git rev-parse --show-toplevel)
+
+NAME=$(basename `git rev-parse --show-toplevel`)_precommit
+docker ps -a | grep $NAME &> /dev/null
+CONTAINER_EXISTS=$?
+
+if [[ CONTAINER_EXISTS -eq 0 ]]; then
+    docker restart $NAME && docker attach --no-stdin $NAME
+else
+    docker run -t -v $(pwd):/app --name $NAME msameerbutt/swiss-knife pre-commit run --all-files
+fi
+```

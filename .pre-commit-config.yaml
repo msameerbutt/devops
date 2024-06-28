@@ -22,15 +22,22 @@ repos:
       - id: check-shebang-scripts-are-executable
       - id: end-of-file-fixer
       - id: mixed-line-ending
-        args: [--fix=auto]
+        args: [--fix=auto] # replace 'auto' with 'lf' to enforce Linux/Mac line endings or 'crlf' for Windows
       - id: no-commit-to-branch
         args: [--branch=master, --branch=main]
       - id: trailing-whitespace
 
 # Its throwing error yet, we will be fixing soon
-#  - repo: https://github.com/antonbabenko/pre-commit-terraform
-#    rev: v1.72.2 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
-#    hooks:
-#      - id: terraform_fmt
-#      - id: terraform_docs
-#      - id: terraform_tfsec
+ - repo: https://github.com/antonbabenko/pre-commit-terraform
+   rev: v1.72.2 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+   hooks:   
+     - id: terraform_fmt
+       args: ['--args=-write=true']
+     - id: terraform_tflint       
+    #  - id: terraform_docs
+    #  - id: terraform_tfsec
+
+# -   repo: https://github.com/pre-commit/mirrors-pylint
+#     rev: v3.0.0a3
+#     hooks:
+#     -   id: pylint
