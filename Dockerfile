@@ -65,9 +65,12 @@ RUN cd /tmp \
     && mkdir /config \
     && chmod g+rwx /config /root \
     # && helm plugin install https://github.com/chartmuseum/helm-push \
-    && pip install --upgrade pip setuptools docker-compose-templer awscli aws-sam-cli cfn-lint azure-identity azure-storage-file-share \
+    && pip install --upgrade pip setuptools docker-compose-templer awscli aws-sam-cli cfn-lint \
     && gem install cfn-nag   
 
+###### INSTALL PyTesting Stuff
+RUN cd /tmp \
+    && pip install --upgrade pip setuptools azure-identity azure-storage-file-share python-hcl2 pytfvars azure-keyvault-secrets
 
 # Setting PathS
 ENV PATH="${GOROOT}/bin:${PATH}"
